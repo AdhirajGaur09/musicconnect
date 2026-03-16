@@ -1,215 +1,292 @@
 # 🎸 MusicConnect
 
-**A full-stack platform connecting musicians in cities — find bandmates, post gigs, form bands.**
+A full-stack musician collaboration platform where musicians can discover each other, post gigs, form bands, and manage their music career — built with React, FastAPI, and MongoDB Atlas.
 
-> Built with FastAPI · React · MongoDB Atlas · Tailwind CSS · Framer Motion
-
----
-
-## Tech Stack
-
-| Layer      | Technology                                      |
-|------------|-------------------------------------------------|
-| Frontend   | React 18, React Router v6, Tailwind CSS, Framer Motion, Axios |
-| Backend    | FastAPI (Python), async with Motor/Beanie ODM   |
-| Database   | MongoDB Atlas (free tier works great)           |
-| Auth       | JWT (python-jose) + bcrypt password hashing     |
-| Deployment | Render (backend) + Vercel (frontend)            |
+![MusicConnect](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 
 ---
 
-## Project Structure
+## 🚀 Live Demo
+
+> Coming soon — deploying on Render + Vercel
+
+---
+
+## 📌 Features
+
+- 🔐 **JWT Authentication** — Register, login, protected routes with bcrypt password hashing
+- 🎵 **Musician Discovery** — Search and filter musicians by city, instrument, genre, and experience
+- 🎤 **Gig Marketplace** — Post gigs, apply to gigs, cancel applications, view applicants
+- 📊 **User Dashboard** — Overview stats, posted gigs, applications, account settings
+- 👤 **Profile Management** — Edit bio, genres, availability, social links, change email/password
+- 🛡️ **Admin Panel** — Role-based access control, ban/unban users, platform-wide stats
+- ✨ **Modern UI** — Framer Motion animations, loading skeletons, toast notifications, responsive design
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|---|---|
+| React 18 | SPA framework |
+| React Router v6 | Client-side routing + protected routes |
+| Tailwind CSS | Styling |
+| Framer Motion | Page transitions and animations |
+| Axios | HTTP client with JWT interceptors |
+| React Hot Toast | Notifications |
+
+### Backend
+| Technology | Purpose |
+|---|---|
+| FastAPI (Python) | REST API framework |
+| Motor / Beanie | Async MongoDB ODM |
+| python-jose | JWT token generation and verification |
+| passlib / bcrypt | Password hashing |
+| Pydantic v2 | Request/response validation |
+
+### Database & Infrastructure
+| Technology | Purpose |
+|---|---|
+| MongoDB Atlas | Cloud database (3 collections) |
+| Vite | Frontend build tool + dev proxy |
+
+---
+
+## 📁 Project Structure
 
 ```
 musicconnect/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py            # FastAPI app + CORS + lifespan
-│   │   ├── database.py        # MongoDB + Beanie init
-│   │   ├── config.py          # Pydantic settings from .env
+│   │   ├── main.py              # FastAPI app entry point
+│   │   ├── database.py          # MongoDB connection
+│   │   ├── config.py            # Environment settings
 │   │   ├── auth/
-│   │   │   ├── jwt.py         # Token create/decode
-│   │   │   └── deps.py        # get_current_user dependency
-│   │   ├── models/
-│   │   │   ├── user.py        # User Beanie document
-│   │   │   ├── gig.py         # Gig Beanie document
-│   │   │   └── application.py # Application Beanie document
-│   │   ├── schemas/
-│   │   │   ├── user.py        # Pydantic request/response schemas
-│   │   │   └── gig.py         # Gig schemas + ApplicationResponse
-│   │   ├── routes/
-│   │   │   ├── auth.py        # POST /api/auth/register|login
-│   │   │   ├── users.py       # GET/PATCH /api/users
-│   │   │   └── gigs.py        # Full CRUD + apply/cancel
-│   │   └── utils/
-│   │       └── security.py    # bcrypt hash/verify
-│   ├── seed.py                # Sample data seeder
-│   ├── requirements.txt
-│   └── .env.example
+│   │   │   ├── jwt.py           # Token create/decode
+│   │   │   └── deps.py          # Auth dependencies (get_current_user, get_admin_user)
+│   │   ├── models/              # Beanie MongoDB documents
+│   │   ├── schemas/             # Pydantic request/response schemas
+│   │   ├── routes/              # API route handlers
+│   │   └── utils/               # Password hashing utilities
+│   ├── seed.py                  # Database seeder (10 users, 8 gigs)
+│   └── requirements.txt
 │
 └── frontend/
     ├── src/
-    │   ├── main.jsx           # Entry point
-    │   ├── App.jsx            # Routes + ProtectedRoute
-    │   ├── index.css          # Global styles + Tailwind
     │   ├── context/
-    │   │   └── AuthContext.jsx # Global auth state
+    │   │   └── AuthContext.jsx  # Global auth state
     │   ├── services/
-    │   │   └── api.js         # Axios instance + all API calls
+    │   │   └── api.js           # Axios instance + all API calls
     │   ├── components/
-    │   │   ├── common/        # Avatar, Modal, Badge, Skeleton…
-    │   │   └── layout/        # Layout, Navbar
-    │   └── pages/
-    │       ├── Home.jsx       # Landing page
-    │       ├── Discover.jsx   # Musician search + filter
-    │       ├── Gigs.jsx       # Gig marketplace + post
-    │       ├── Dashboard.jsx  # User dashboard (4 tabs)
-    │       ├── Profile.jsx    # Public + own profile
-    │       ├── Login.jsx
-    │       ├── Register.jsx   # 2-step onboarding
-    │       └── NotFound.jsx
-    ├── package.json
-    ├── vite.config.js         # Dev proxy → localhost:8000
-    ├── tailwind.config.js
-    └── index.html
+    │   │   ├── common/          # Avatar, Modal, Badge, Skeleton, Field
+    │   │   └── layout/          # Navbar, Layout
+    │   └── pages/               # Home, Discover, Gigs, Dashboard, Profile, Login, Register
+    ├── vite.config.js
+    └── package.json
 ```
 
 ---
 
-## Quick Start
+## ⚙️ Local Setup
 
-### 1. MongoDB Atlas Setup
-1. Create free account at [mongodb.com/atlas](https://mongodb.com/atlas)
-2. Create a free M0 cluster
-3. Add a database user (username + password)
-4. Whitelist your IP (or allow all: `0.0.0.0/0` for dev)
-5. Copy the connection string
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- MongoDB Atlas account (free tier)
 
-### 2. Backend Setup
+### Backend Setup
 
 ```bash
 cd backend
 
-# Copy env file and fill in your values
-cp .env.example .env
-# Edit .env — set MONGODB_URL and SECRET_KEY
-
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Mac/Linux
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Seed sample data (optional but recommended)
+# Configure environment
+cp .env.example .env
+# Edit .env — add your MongoDB Atlas URL and SECRET_KEY
+
+# Seed sample data
 python seed.py
 
-# Start dev server
+# Start server
 uvicorn app.main:app --reload --port 8000
 ```
 
-API docs available at: http://localhost:8000/docs
+API docs available at: **http://localhost:8000/docs**
 
-### 3. Frontend Setup
+### Frontend Setup
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start dev server (proxies /api to localhost:8000)
 npm run dev
 ```
 
-Open: http://localhost:5173
+Open: **http://localhost:5173**
 
 ---
 
-## API Reference
+## 🔑 API Endpoints
 
 ### Authentication
 ```
-POST /api/auth/register   → { access_token, user }
-POST /api/auth/login      → { access_token, user }
+POST /api/auth/register    — Register new user
+POST /api/auth/login       — Login and get JWT token
 ```
 
 ### Users
 ```
-GET    /api/users              → List musicians (filter: city, role, genre, experience, search)
-GET    /api/users/me           → Current user profile (protected)
-PATCH  /api/users/me           → Update profile (protected)
-GET    /api/users/{id}         → Public profile
+GET    /api/users          — List musicians (filter: city, role, genre, experience)
+GET    /api/users/me       — Get current user profile
+PATCH  /api/users/me       — Update profile
+GET    /api/users/{id}     — Get public profile
+PATCH  /api/users/me/change-password
+PATCH  /api/users/me/change-email
 ```
 
 ### Gigs
 ```
-GET    /api/gigs               → List gigs (filter: city, role, status, search)
-POST   /api/gigs               → Create gig (protected)
-GET    /api/gigs/{id}          → Gig detail
-PATCH  /api/gigs/{id}          → Update gig (owner only)
-DELETE /api/gigs/{id}          → Delete gig (owner only)
-POST   /api/gigs/{id}/apply    → Apply to gig (protected)
-DELETE /api/gigs/{id}/apply    → Cancel application (protected)
-GET    /api/gigs/{id}/applicants → View applicants (owner only)
-GET    /api/gigs/my/applications → My applications (protected)
+GET    /api/gigs                    — List gigs (filter: city, role, status)
+POST   /api/gigs                    — Create gig
+GET    /api/gigs/{id}               — Get gig detail
+PATCH  /api/gigs/{id}               — Update gig (owner only)
+DELETE /api/gigs/{id}               — Delete gig (owner only)
+POST   /api/gigs/{id}/apply         — Apply to gig
+DELETE /api/gigs/{id}/apply         — Cancel application
+GET    /api/gigs/{id}/applicants    — View applicants (owner only)
+GET    /api/gigs/my/applications    — My applications
+```
+
+### Admin (admin only)
+```
+GET    /api/admin/stats             — Platform statistics
+GET    /api/admin/users             — All users list
+PATCH  /api/admin/users/{id}/ban    — Ban user
+PATCH  /api/admin/users/{id}/unban  — Unban user
+PATCH  /api/admin/users/{id}/promote — Promote to admin
+DELETE /api/admin/users/{id}        — Delete user
+DELETE /api/admin/gigs/{id}         — Delete any gig
 ```
 
 ---
 
-## Demo Accounts
+## 👥 Demo Accounts
 
 After running `python seed.py`:
 
-| Email             | Password  | Role       | City       |
-|-------------------|-----------|------------|------------|
-| arjun@demo.com    | demo1234  | Guitarist  | Bangalore  |
-| priya@demo.com    | demo1234  | Vocalist   | Bangalore  |
-| rahul@demo.com    | demo1234  | Drummer    | Mumbai     |
-| karthik@demo.com  | demo1234  | Producer   | Hyderabad  |
+| Email | Password | Role | City |
+|---|---|---|---|
+| adhiraj@demo.com | demo1234 | Guitarist | Bangalore |
+| priya@demo.com | demo1234 | Vocalist | Bangalore |
+| rahul@demo.com | demo1234 | Drummer | Mumbai |
+| karthik@demo.com | demo1234 | Producer | Hyderabad |
+
+> **Admin account:** `adhiraj@demo.com` — has access to Admin Panel in Dashboard
 
 ---
 
-## Deployment
+## 📸 Screenshots
+
+> Add screenshots of your app here after deployment
+> Dashboard | Gig Marketplace | Discover Musicians | Admin Panel
+
+---
+
+## 🗄️ Database Schema
+
+### Users Collection
+```json
+{
+  "name": "string",
+  "email": "string (unique, indexed)",
+  "hashed_password": "string",
+  "role": "string",
+  "city": "string (indexed)",
+  "genres": ["string"],
+  "experience": "Beginner | Intermediate | Professional",
+  "bio": "string",
+  "availability": "Available | Busy | Looking for band",
+  "rating": "float",
+  "is_admin": "boolean",
+  "is_active": "boolean"
+}
+```
+
+### Gigs Collection
+```json
+{
+  "title": "string",
+  "description": "string",
+  "city": "string (indexed)",
+  "date": "datetime",
+  "required_roles": ["string"],
+  "payment": "float",
+  "payment_type": "Per Gig | Per Hour | Rev Share | ...",
+  "status": "open | filled | cancelled | completed (indexed)",
+  "created_by": "string (user id)",
+  "applicant_count": "integer"
+}
+```
+
+### Applications Collection
+```json
+{
+  "gig_id": "string (indexed)",
+  "applicant_id": "string (indexed)",
+  "message": "string",
+  "status": "pending | accepted | rejected | cancelled",
+  "applied_at": "datetime"
+}
+```
+
+---
+
+## 🔒 Security
+
+- Passwords hashed with **bcrypt** (passlib)
+- **JWT tokens** with configurable expiry (default 7 days)
+- All mutation endpoints require authentication via `Bearer` token
+- **Admin routes** protected by `get_admin_user` dependency — returns `403 Forbidden` to non-admin users
+- Input validation on all endpoints via **Pydantic v2** schemas
+- CORS configured to allow only the frontend origin
+
+---
+
+## 🚀 Deployment
 
 ### Backend → Render.com
-1. Push backend folder to a GitHub repo
-2. Create new **Web Service** on Render
-3. Build command: `pip install -r requirements.txt`
-4. Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+1. Push `backend/` to GitHub
+2. New Web Service on Render
+3. Build: `pip install -r requirements.txt`
+4. Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 5. Add environment variables from `.env`
 
 ### Frontend → Vercel
-1. Push frontend folder to GitHub
-2. Import project on Vercel
-3. Framework: Vite
-4. Add env variable: `VITE_API_URL=https://your-render-app.onrender.com`
-5. Update `vite.config.js` proxy target to your Render URL for production
+1. Import `frontend/` from GitHub
+2. Framework: Vite
+3. Add env variable: `VITE_API_URL=https://your-render-app.onrender.com`
 
 ---
 
-## Features Implemented
+## 👨‍💻 Author
 
-- ✅ JWT Authentication (register + login + protected routes)
-- ✅ Musician discovery with multi-filter search
-- ✅ Gig marketplace — create, browse, apply, cancel
-- ✅ User dashboard with tabs (overview, gigs, applications, settings)
-- ✅ Public musician profiles
-- ✅ Edit profile (bio, city, genres, availability, social links)
-- ✅ Animated UI with Framer Motion page transitions
-- ✅ Responsive design (mobile-first)
-- ✅ Toast notifications
-- ✅ Loading skeletons
-
-## Potential Extensions
-- Real-time notifications (WebSocket)
-- Musician rating system
-- In-app messaging
-- Band management module
-- File uploads (profile pictures, audio samples)
-- Email verification
-- Admin dashboard
+**Adhiraj Gaur**
+- GitHub: [@AdhirajGaur09](https://github.com/AdhirajGaur09)
+- LinkedIn: [adhiraj-gaur](https://www.linkedin.com/in/adhiraj-gaur-301395297/)
 
 ---
 
-*Built as a portfolio full-stack project demonstrating FastAPI + React + MongoDB architecture.*
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
