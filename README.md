@@ -11,8 +11,7 @@ A full-stack musician collaboration platform where musicians can discover each o
 ---
 
 ## 🚀 Live Demo
-
-> Coming soon — deploying on Render + Vercel
+**[https://musicconnect-frontend.onrender.com](https://musicconnect-frontend.onrender.com)**
 
 ---
 
