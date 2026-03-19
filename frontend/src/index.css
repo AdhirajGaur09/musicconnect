@@ -31,6 +31,29 @@ html, body, #root {
     --orange: #fb923c;
   }
 
+  [data-theme="light"] {
+  --bg: #f8f9ff;
+  --bg2: #ffffff;
+  --bg3: #f0f2ff;
+  --surface: #ffffff;
+  --surface2: #eef0ff;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.15);
+  --text: #0f1118;
+  --text2: #4a5068;
+  --text3: #8890aa;
+  --accent: #7c6aff;
+  --accent2: #6b59ee;
+  --accent3: #5548cc;
+  --gold: #c49a00;
+  --green: #1a9e6e;
+  --red: #e05252;
+  --cyan: #0899b5;
+  --pink: #d43d7a;
+  --orange: #e07020;
+  --glow: rgba(124,106,255,0.08);
+}
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 

@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useTheme } from '../../context/ThemeContext'
+import { Sun, Moon } from 'lucide-react'
 import { Music2, LogOut, User, Menu, X } from 'lucide-react'
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -61,10 +64,16 @@ export default function Navbar() {
                 </div>
                 <span className="text-sm font-medium text-[var(--text2)] max-w-[100px] truncate">{user.name}</span>
               </Link>
+              <button onClick={toggleTheme}
+                className="w-9 h-9 rounded-xl border border-[var(--border2)] flex items-center justify-center
+                text-[var(--text2)] hover:text-[var(--text)] hover:border-accent transition-all duration-200">
+                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              </button>
               <button onClick={handleLogout}
                 className="w-9 h-9 rounded-xl border border-[var(--border2)] flex items-center justify-center text-[var(--text2)] hover:text-[var(--red)] hover:border-[rgba(248,113,113,0.3)] transition-all duration-200">
                 <LogOut size={15} />
               </button>
+
             </div>
           ) : (
             <>
@@ -104,6 +113,12 @@ export default function Navbar() {
             {user ? (
               <div>
                 <div className="px-4 py-2 text-xs text-[var(--text3)]">Logged in as <span className="text-[var(--accent3)]">{user.name}</span></div>
+                <button onClick={toggleTheme}
+                  className="flex items-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-medium
+                    text-[var(--text2)] hover:bg-[var(--surface)] transition-all duration-200">
+                  {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                  {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                </button>
                 <button onClick={handleLogout}
                   className="flex items-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-medium text-[var(--red)] hover:bg-[rgba(248,113,113,0.08)] transition-all duration-200">
                   <LogOut size={15} /> Log Out
