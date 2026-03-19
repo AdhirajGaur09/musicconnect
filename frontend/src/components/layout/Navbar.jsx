@@ -33,7 +33,11 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[var(--border)]"
-         style={{ background: 'rgba(8,10,16,0.92)', backdropFilter: 'blur(16px)' }}>
+         style={{ 
+            background: 'var(--bg2)', 
+            backdropFilter: 'blur(16px)',
+            borderColor: 'var(--border)'
+          }}>
       <div className="max-w-[1160px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
@@ -102,7 +106,7 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
         <div className="md:hidden border-t border-[var(--border)] px-4 py-3 space-y-1"
-             style={{ background: 'rgba(8,10,16,0.97)' }}>
+             style={{ background: 'var(--nav-mobile-bg)' }}>
           <NavLink to="/"         end className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>🏠 Home</NavLink>
           <NavLink to="/discover"     className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>🎸 Discover</NavLink>
           <NavLink to="/gigs"         className={mobileNavLinkClass} onClick={() => setMenuOpen(false)}>🎤 Gigs</NavLink>
