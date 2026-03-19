@@ -7,7 +7,7 @@ import api from '../services/api'
 import { Avatar, Badge, EmptyState, Modal, Field, PageWrapper } from '../components/common'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import { LayoutDashboard, Mic2, FileText, Settings, Plus, ShieldCheck } from 'lucide-react'
+import { LayoutDashboard, Mic2, FileText, Settings, Plus, ShieldCheck, ChevronDown } from 'lucide-react'
 
 const GENRES = ['Rock','Blues','Jazz','Pop','Hip-Hop','Classical','Folk','Electronic','Metal','Funk','Reggae','R&B']
 const CITIES = ['Bangalore','Mumbai','Delhi','Chennai','Hyderabad','Pune','Kolkata','Mysuru']
@@ -15,10 +15,10 @@ const ROLES  = ['Guitarist','Bassist','Drummer','Vocalist','Pianist','Producer']
 
 function StatCard({ label, value, color, change }) {
   return (
-    <div className="card p-5">
-      <div className="text-xs text-[var(--text3)] font-semibold uppercase tracking-wider mb-3">{label}</div>
-      <div className="font-head text-3xl font-extrabold" style={{ color }}>{value}</div>
-      {change && <div className="text-xs text-[var(--green)] mt-1.5">{change}</div>}
+    <div className="card p-4 sm:p-5">
+      <div className="text-xs text-[var(--text3)] font-semibold uppercase tracking-wider mb-2 sm:mb-3">{label}</div>
+      <div className="font-head text-2xl sm:text-3xl font-extrabold" style={{ color }}>{value}</div>
+      {change && <div className="text-xs text-[var(--green)] mt-1">{change}</div>}
     </div>
   )
 }
@@ -26,27 +26,27 @@ function StatCard({ label, value, color, change }) {
 function OverviewTab({ user, myGigs, applications }) {
   return (
     <div>
-      <h2 className="font-head text-2xl font-extrabold mb-1">Welcome back, {user.name.split(' ')[0]}! 👋</h2>
-      <p className="text-sm text-[var(--text2)] mb-7">Here's what's happening with your music career.</p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <h2 className="font-head text-xl sm:text-2xl font-extrabold mb-1">Welcome back, {user.name.split(' ')[0]}! 👋</h2>
+      <p className="text-sm text-[var(--text2)] mb-5 sm:mb-7">Here's what's happening with your music career.</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <StatCard label="Applications"  value={applications.length} color="var(--accent3)" change="Total applied" />
         <StatCard label="Posted Gigs"   value={myGigs.length}       color="var(--gold)"    change="Active listings" />
         <StatCard label="Profile Views" value={248}                 color="var(--cyan)"    change="This month" />
         <StatCard label="Rating"        value={user.rating || '—'}  color="var(--green)"   change={user.rating_count + ' reviews'} />
       </div>
       <div className="card p-1 overflow-hidden">
-        <div className="px-5 py-4 border-b border-[var(--border)] font-head font-bold">Recent Activity</div>
+        <div className="px-4 sm:px-5 py-4 border-b border-[var(--border)] font-head font-bold text-sm sm:text-base">Recent Activity</div>
         {[
-          { dot: 'var(--green)',  text: applications[0] ? `You applied to "${applications[0].gig_title}"` : 'No applications yet — browse gigs!', time: '2 hours ago' },
+          { dot: 'var(--green)',  text: applications[0] ? `Applied to "${applications[0].gig_title}"` : 'No applications yet — browse gigs!', time: '2 hours ago' },
           { dot: 'var(--accent)', text: 'A musician sent you a collaboration request', time: '5 hours ago' },
           { dot: 'var(--gold)',   text: myGigs[0] ? `Your gig "${myGigs[0].title}" is live` : 'Post your first gig to get started', time: '1 day ago' },
           { dot: 'var(--cyan)',   text: 'Someone viewed your profile', time: '1 day ago' },
           { dot: 'var(--pink)',   text: 'New gig match found in your city', time: '2 days ago' },
         ].map((a, i) => (
-          <div key={i} className="flex gap-4 px-5 py-3.5 border-b border-[var(--border)] last:border-0">
-            <div className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: a.dot }} />
-            <div>
-              <div className="text-sm text-[var(--text2)]">{a.text}</div>
+          <div key={i} className="flex gap-3 sm:gap-4 px-4 sm:px-5 py-3 border-b border-[var(--border)] last:border-0">
+            <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ background: a.dot }} />
+            <div className="min-w-0">
+              <div className="text-xs sm:text-sm text-[var(--text2)] leading-relaxed">{a.text}</div>
               <div className="text-xs text-[var(--text3)] mt-0.5">{a.time}</div>
             </div>
           </div>
@@ -69,8 +69,8 @@ function MyGigsTab({ myGigs, onPostClick, onRefresh }) {
   }
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-head text-xl font-extrabold">My Posted Gigs</h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="font-head text-lg sm:text-xl font-extrabold">My Posted Gigs</h2>
         <button className="btn-primary text-sm" onClick={onPostClick}><Plus size={14} /> Post Gig</button>
       </div>
       {myGigs.length === 0 ? (
@@ -78,29 +78,31 @@ function MyGigsTab({ myGigs, onPostClick, onRefresh }) {
           action={<button className="btn-primary" onClick={onPostClick}>Post a Gig</button>} />
       ) : (
         <div className="card overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-[var(--border)]">
-                {['Gig','City','Date','Applicants','Status',''].map(h => (
-                  <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {myGigs.map(g => (
-                <tr key={g.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
-                  <td className="px-5 py-3.5 font-medium text-sm max-w-[200px] truncate">{g.title}</td>
-                  <td className="px-5 py-3.5 text-sm text-[var(--text2)]">{g.city}</td>
-                  <td className="px-5 py-3.5 text-sm text-[var(--text2)]">{format(new Date(g.date), 'd MMM')}</td>
-                  <td className="px-5 py-3.5">
-                    <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-full bg-accent text-white text-xs font-bold px-1.5">{g.applicant_count}</span>
-                  </td>
-                  <td className="px-5 py-3.5"><Badge variant={g.status === 'open' ? 'green' : 'red'}>{g.status}</Badge></td>
-                  <td className="px-5 py-3.5"><button className="btn-danger text-xs" onClick={() => handleDelete(g.id)}>Delete</button></td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[500px]">
+              <thead>
+                <tr className="border-b border-[var(--border)]">
+                  {['Gig','City','Date','Applicants','Status',''].map(h => (
+                    <th key={h} className="px-3 sm:px-5 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider whitespace-nowrap">{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {myGigs.map(g => (
+                  <tr key={g.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
+                    <td className="px-3 sm:px-5 py-3 font-medium text-sm max-w-[140px] truncate">{g.title}</td>
+                    <td className="px-3 sm:px-5 py-3 text-sm text-[var(--text2)] whitespace-nowrap">{g.city}</td>
+                    <td className="px-3 sm:px-5 py-3 text-sm text-[var(--text2)] whitespace-nowrap">{format(new Date(g.date), 'd MMM')}</td>
+                    <td className="px-3 sm:px-5 py-3">
+                      <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-full bg-accent text-white text-xs font-bold px-1.5">{g.applicant_count}</span>
+                    </td>
+                    <td className="px-3 sm:px-5 py-3"><Badge variant={g.status === 'open' ? 'green' : 'red'}>{g.status}</Badge></td>
+                    <td className="px-3 sm:px-5 py-3"><button className="btn-danger text-xs" onClick={() => handleDelete(g.id)}>Delete</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
@@ -118,36 +120,38 @@ function ApplicationsTab({ applications, onRefresh }) {
   }
   return (
     <div>
-      <h2 className="font-head text-xl font-extrabold mb-6">My Applications</h2>
+      <h2 className="font-head text-lg sm:text-xl font-extrabold mb-5">My Applications</h2>
       {applications.length === 0 ? (
         <EmptyState icon="📋" title="No applications yet" description="Browse gigs and apply to start building your performance history"
           action={<Link to="/gigs" className="btn-primary">Browse Gigs</Link>} />
       ) : (
         <div className="card overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-[var(--border)]">
-                {['Gig','Role','Applied','Status',''].map(h => (
-                  <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {applications.map(a => (
-                <tr key={a.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
-                  <td className="px-5 py-3.5 font-medium text-sm max-w-[200px] truncate">{a.gig_title}</td>
-                  <td className="px-5 py-3.5 text-sm text-[var(--text2)]">{a.applicant_role}</td>
-                  <td className="px-5 py-3.5 text-sm text-[var(--text2)]">{format(new Date(a.applied_at), 'd MMM yyyy')}</td>
-                  <td className="px-5 py-3.5"><Badge variant={STATUS_VARIANT[a.status] || 'gold'}>{a.status}</Badge></td>
-                  <td className="px-5 py-3.5">
-                    {a.status === 'pending' && (
-                      <button className="btn-danger text-xs" onClick={() => handleCancel(a.gig_id)}>Cancel</button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[480px]">
+              <thead>
+                <tr className="border-b border-[var(--border)]">
+                  {['Gig','Role','Applied','Status',''].map(h => (
+                    <th key={h} className="px-3 sm:px-5 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider whitespace-nowrap">{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {applications.map(a => (
+                  <tr key={a.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
+                    <td className="px-3 sm:px-5 py-3 font-medium text-sm max-w-[140px] truncate">{a.gig_title}</td>
+                    <td className="px-3 sm:px-5 py-3 text-sm text-[var(--text2)] whitespace-nowrap">{a.applicant_role}</td>
+                    <td className="px-3 sm:px-5 py-3 text-sm text-[var(--text2)] whitespace-nowrap">{format(new Date(a.applied_at), 'd MMM yy')}</td>
+                    <td className="px-3 sm:px-5 py-3"><Badge variant={STATUS_VARIANT[a.status] || 'gold'}>{a.status}</Badge></td>
+                    <td className="px-3 sm:px-5 py-3">
+                      {a.status === 'pending' && (
+                        <button className="btn-danger text-xs" onClick={() => handleCancel(a.gig_id)}>Cancel</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
@@ -231,10 +235,10 @@ function SettingsTab({ user, onUpdate, logout }) {
 
   return (
     <div>
-      <h2 className="font-head text-xl font-extrabold mb-6">Account Settings</h2>
-      <div className="card p-6 mb-5">
-        <h3 className="font-head font-bold text-base mb-4">Profile Info</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 className="font-head text-lg sm:text-xl font-extrabold mb-5">Account Settings</h2>
+      <div className="card p-4 sm:p-6 mb-4">
+        <h3 className="font-head font-bold text-sm sm:text-base mb-4">Profile Info</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <Field label="Display Name">
             <input className="input" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
           </Field>
@@ -253,7 +257,7 @@ function SettingsTab({ user, onUpdate, logout }) {
               <option>Available</option><option>Busy</option><option>Looking for band</option>
             </select>
           </Field>
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2">
             <Field label="Bio">
               <textarea className="input" rows={3} value={form.bio}
                 onChange={e => setForm(p => ({ ...p, bio: e.target.value }))} />
@@ -261,12 +265,12 @@ function SettingsTab({ user, onUpdate, logout }) {
           </div>
         </div>
       </div>
-      <div className="card p-6 mb-5">
-        <h3 className="font-head font-bold text-base mb-4">Genres</h3>
+      <div className="card p-4 sm:p-6 mb-4">
+        <h3 className="font-head font-bold text-sm sm:text-base mb-4">Genres</h3>
         <div className="flex flex-wrap gap-2">
           {GENRES.map(g => (
             <button key={g} type="button" onClick={() => toggleGenre(g)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer
                 ${Array.isArray(form.genres) && form.genres.includes(g)
                   ? 'bg-[rgba(124,106,255,0.15)] border-accent text-[var(--accent3)]'
                   : 'bg-transparent border-[var(--border)] text-[var(--text2)] hover:border-accent'}`}>
@@ -275,12 +279,12 @@ function SettingsTab({ user, onUpdate, logout }) {
           ))}
         </div>
       </div>
-      <button className="btn-primary mb-8" onClick={handleSave} disabled={saving}>
+      <button className="btn-primary mb-6 w-full sm:w-auto" onClick={handleSave} disabled={saving}>
         {saving ? 'Saving…' : 'Save Changes'}
       </button>
-      <div className="card p-6">
-        <h3 className="font-head font-bold text-base mb-6">Security</h3>
-        <div className="mb-6">
+      <div className="card p-4 sm:p-6">
+        <h3 className="font-head font-bold text-sm sm:text-base mb-5">Security</h3>
+        <div className="mb-5">
           <h4 className="text-sm font-semibold text-[var(--text2)] mb-1">Change Email</h4>
           <p className="text-xs text-[var(--text3)] mb-3">Current: <span className="text-[var(--text2)]">{user.email}</span></p>
           <div className="flex flex-col gap-3">
@@ -288,12 +292,12 @@ function SettingsTab({ user, onUpdate, logout }) {
               value={newEmail} onChange={e => setNewEmail(e.target.value)} />
             <input className="input" type="password" placeholder="Confirm with your current password"
               value={emailPassword} onChange={e => setEmailPassword(e.target.value)} />
-            <button className="btn-primary w-fit" onClick={handleChangeEmail} disabled={savingEmail}>
+            <button className="btn-primary w-full sm:w-fit" onClick={handleChangeEmail} disabled={savingEmail}>
               {savingEmail ? 'Updating…' : 'Update Email'}
             </button>
           </div>
         </div>
-        <div className="h-px bg-[var(--border)] mb-6" />
+        <div className="h-px bg-[var(--border)] mb-5" />
         <div>
           <h4 className="text-sm font-semibold text-[var(--text2)] mb-3">Change Password</h4>
           <div className="flex flex-col gap-3">
@@ -303,7 +307,7 @@ function SettingsTab({ user, onUpdate, logout }) {
               value={newPassword} onChange={e => setNewPassword(e.target.value)} />
             <input className="input" type="password" placeholder="Confirm new password"
               value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
-            <button className="btn-primary w-fit" onClick={handleChangePassword} disabled={savingPassword}>
+            <button className="btn-primary w-full sm:w-fit" onClick={handleChangePassword} disabled={savingPassword}>
               {savingPassword ? 'Updating…' : 'Update Password'}
             </button>
           </div>
@@ -354,80 +358,75 @@ function AdminTab() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-5">
         <div className="w-8 h-8 rounded-lg bg-[rgba(248,113,113,0.15)] flex items-center justify-center">
           <ShieldCheck size={16} className="text-[var(--red)]" />
         </div>
-        <h2 className="font-head text-xl font-extrabold">Admin Panel</h2>
+        <h2 className="font-head text-lg sm:text-xl font-extrabold">Admin Panel</h2>
       </div>
       {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
           {[
-            { label: 'Total Users',  value: stats.total_users,  color: 'var(--accent3)' },
-            { label: 'Total Gigs',   value: stats.total_gigs,   color: 'var(--gold)' },
-            { label: 'Active Gigs',  value: stats.active_gigs,  color: 'var(--green)' },
-            { label: 'Applications', value: stats.total_apps,   color: 'var(--cyan)' },
-            { label: 'Banned',       value: stats.banned_users, color: 'var(--red)' },
+            { label: 'Users',   value: stats.total_users,  color: 'var(--accent3)' },
+            { label: 'Gigs',    value: stats.total_gigs,   color: 'var(--gold)' },
+            { label: 'Active',  value: stats.active_gigs,  color: 'var(--green)' },
+            { label: 'Apps',    value: stats.total_apps,   color: 'var(--cyan)' },
+            { label: 'Banned',  value: stats.banned_users, color: 'var(--red)' },
           ].map(s => (
-            <div key={s.label} className="card p-4 text-center">
-              <div className="font-head text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
+            <div key={s.label} className="card p-3 sm:p-4 text-center">
+              <div className="font-head text-xl sm:text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
               <div className="text-xs text-[var(--text3)] mt-1">{s.label}</div>
             </div>
           ))}
         </div>
       )}
       <div className="card overflow-hidden">
-        <div className="px-5 py-4 border-b border-[var(--border)] font-head font-bold flex items-center justify-between">
-          All Users
-          <span className="text-xs font-normal text-[var(--text3)]">{users.length} total</span>
+        <div className="px-4 sm:px-5 py-4 border-b border-[var(--border)] font-head font-bold text-sm flex items-center justify-between">
+          All Users <span className="text-xs font-normal text-[var(--text3)]">{users.length} total</span>
         </div>
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-[var(--border)]">
-              {['Name','Email','Role','City','Status','Actions'].map(h => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(u => (
-              <tr key={u.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
-                <td className="px-4 py-3 text-sm font-medium">
-                  {u.name}
-                  {u.is_admin && <span className="ml-2 badge badge-red" style={{fontSize:10}}>admin</span>}
-                </td>
-                <td className="px-4 py-3 text-xs text-[var(--text2)]">{u.email}</td>
-                <td className="px-4 py-3 text-xs text-[var(--text2)]">{u.role}</td>
-                <td className="px-4 py-3 text-xs text-[var(--text2)]">{u.city}</td>
-                <td className="px-4 py-3">
-                  <Badge variant={u.is_active ? 'green' : 'red'}>
-                    {u.is_active ? 'Active' : 'Banned'}
-                  </Badge>
-                </td>
-                <td className="px-4 py-3">
-                  {!u.is_admin && (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleBan(u.id, !u.is_active)}
-                        className={`text-xs px-2.5 py-1 rounded-lg border transition-all cursor-pointer
-                          ${u.is_active
-                            ? 'bg-[rgba(248,113,113,0.1)] text-[var(--red)] border-[rgba(248,113,113,0.2)] hover:bg-[rgba(248,113,113,0.2)]'
-                            : 'bg-[rgba(52,211,153,0.1)] text-[var(--green)] border-[rgba(52,211,153,0.2)] hover:bg-[rgba(52,211,153,0.2)]'}`}>
-                        {u.is_active ? 'Ban' : 'Unban'}
-                      </button>
-                      <button
-                        onClick={() => handleDelete(u.id, u.name)}
-                        className="text-xs px-2.5 py-1 rounded-lg border transition-all cursor-pointer
-                          bg-[rgba(248,113,113,0.1)] text-[var(--red)] border-[rgba(248,113,113,0.2)] hover:bg-[rgba(248,113,113,0.2)]">
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px]">
+            <thead>
+              <tr className="border-b border-[var(--border)]">
+                {['Name','Email','Role','Status','Actions'].map(h => (
+                  <th key={h} className="px-3 sm:px-4 py-3 text-left text-xs font-semibold text-[var(--text3)] uppercase tracking-wider whitespace-nowrap">{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map(u => (
+                <tr key={u.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(255,255,255,0.02)]">
+                  <td className="px-3 sm:px-4 py-3 text-sm font-medium max-w-[120px] truncate">
+                    {u.name}
+                    {u.is_admin && <span className="ml-1 badge badge-red" style={{fontSize:9}}>admin</span>}
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 text-xs text-[var(--text2)] max-w-[140px] truncate">{u.email}</td>
+                  <td className="px-3 sm:px-4 py-3 text-xs text-[var(--text2)] whitespace-nowrap">{u.role}</td>
+                  <td className="px-3 sm:px-4 py-3">
+                    <Badge variant={u.is_active ? 'green' : 'red'}>{u.is_active ? 'Active' : 'Banned'}</Badge>
+                  </td>
+                  <td className="px-3 sm:px-4 py-3">
+                    {!u.is_admin && (
+                      <div className="flex gap-1.5">
+                        <button onClick={() => handleBan(u.id, !u.is_active)}
+                          className={`text-xs px-2 py-1 rounded-lg border transition-all cursor-pointer whitespace-nowrap
+                            ${u.is_active
+                              ? 'bg-[rgba(248,113,113,0.1)] text-[var(--red)] border-[rgba(248,113,113,0.2)]'
+                              : 'bg-[rgba(52,211,153,0.1)] text-[var(--green)] border-[rgba(52,211,153,0.2)]'}`}>
+                          {u.is_active ? 'Ban' : 'Unban'}
+                        </button>
+                        <button onClick={() => handleDelete(u.id, u.name)}
+                          className="text-xs px-2 py-1 rounded-lg border bg-[rgba(248,113,113,0.1)] text-[var(--red)] border-[rgba(248,113,113,0.2)] transition-all cursor-pointer">
+                          Del
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
@@ -440,12 +439,12 @@ export default function Dashboard() {
   const [applications, setApplications] = useState([])
   const [postOpen,     setPostOpen]     = useState(false)
   const [submitting,   setSubmitting]   = useState(false)
+  const [mobileTabOpen, setMobileTabOpen] = useState(false)
   const [postForm,     setPostForm]     = useState({
     title: '', description: '', city: 'Bangalore', date: '',
     payment: '', payment_type: 'Per Gig', required_roles: [],
   })
 
-  // ← TABS is now INSIDE the component so it can access `user`
   const TABS = [
     { id: 'overview',     label: 'Overview',     icon: LayoutDashboard },
     { id: 'mygigs',       label: 'My Gigs',       icon: Mic2 },
@@ -453,6 +452,8 @@ export default function Dashboard() {
     { id: 'settings',     label: 'Settings',      icon: Settings },
     ...(user?.is_admin ? [{ id: 'admin', label: 'Admin Panel', icon: ShieldCheck }] : []),
   ]
+
+  const activeTab = TABS.find(t => t.id === tab) || TABS[0]
 
   const loadData = async () => {
     if (!user) return
@@ -463,9 +464,7 @@ export default function Dashboard() {
       ])
       setMyGigs(gigsRes.data.filter(g => g.created_by === user.id))
       setApplications(appsRes.data)
-    } catch (e) {
-      console.error('Dashboard load error:', e)
-    }
+    } catch (e) { console.error('Dashboard load error:', e) }
   }
 
   useEffect(() => { loadData() }, [user])
@@ -510,9 +509,40 @@ export default function Dashboard() {
 
   return (
     <PageWrapper>
-      <section className="px-6 py-10 max-w-[1160px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
-          <div>
+      <section className="px-3 sm:px-6 py-6 sm:py-10 max-w-[1160px] mx-auto">
+
+        {/* Mobile Tab Selector */}
+        <div className="md:hidden mb-4">
+          <button
+            onClick={() => setMobileTabOpen(!mobileTabOpen)}
+            className="w-full flex items-center justify-between px-4 py-3 card">
+            <div className="flex items-center gap-3">
+              <activeTab.icon size={16} className="text-[var(--accent3)]" />
+              <span className="font-medium text-sm">{activeTab.label}</span>
+            </div>
+            <ChevronDown size={16} className={`text-[var(--text3)] transition-transform ${mobileTabOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {mobileTabOpen && (
+            <div className="card mt-1 overflow-hidden">
+              {TABS.map(t => (
+                <button key={t.id}
+                  onClick={() => { setTab(t.id); setMobileTabOpen(false) }}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-sm font-medium transition-all border-b border-[var(--border)] last:border-0
+                    ${tab === t.id
+                      ? 'bg-[rgba(124,106,255,0.12)] text-[var(--accent3)]'
+                      : 'text-[var(--text2)] hover:bg-[var(--bg3)]'}`}>
+                  <t.icon size={15} />
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-4 sm:gap-6">
+
+          {/* Desktop Sidebar */}
+          <div className="hidden md:block">
             <div className="card p-5 sticky top-24">
               <div className="text-center pb-5 mb-5 border-b border-[var(--border)]">
                 <Avatar name={user?.name || ''} size="lg" className="mx-auto mb-3" />
@@ -537,6 +567,7 @@ export default function Dashboard() {
             </div>
           </div>
 
+          {/* Content */}
           <AnimatePresence mode="wait">
             <motion.div key={tab}
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -551,6 +582,7 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {/* Post Gig Modal */}
       <Modal open={postOpen} onClose={() => setPostOpen(false)} title="Post a Gig">
         <div className="flex flex-col gap-4">
           <Field label="Title *">
@@ -560,7 +592,7 @@ export default function Dashboard() {
             <textarea className="input" rows={3} value={postForm.description}
               onChange={e => setPostForm(p => ({ ...p, description: e.target.value }))} />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="City">
               <select className="input" value={postForm.city} onChange={e => setPostForm(p => ({ ...p, city: e.target.value }))}>
                 {CITIES.map(c => <option key={c}>{c}</option>)}
@@ -595,9 +627,9 @@ export default function Dashboard() {
             </div>
           </Field>
         </div>
-        <div className="flex gap-3 justify-end mt-6">
-          <button className="btn-ghost" onClick={() => setPostOpen(false)}>Cancel</button>
-          <button className="btn-primary" onClick={submitGig} disabled={submitting}>
+        <div className="flex flex-col sm:flex-row gap-3 justify-end mt-6">
+          <button className="btn-ghost w-full sm:w-auto" onClick={() => setPostOpen(false)}>Cancel</button>
+          <button className="btn-primary w-full sm:w-auto" onClick={submitGig} disabled={submitting}>
             {submitting ? 'Posting…' : 'Post Gig →'}
           </button>
         </div>
