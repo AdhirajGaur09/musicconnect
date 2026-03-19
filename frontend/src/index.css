@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 @layer base {
   :root {
     --bg: #080a10;
