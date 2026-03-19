@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div>
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden px-6 pt-24 pb-20 text-center">
+      <section className="relative overflow-hidden px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20 text-center w-full">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none"
              style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,106,255,0.12) 0%, transparent 70%)' }} />
@@ -116,7 +116,7 @@ export default function Home() {
       <div className="h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-20" />
 
       {/* ── Features ── */}
-      <section className="px-6 py-20">
+      <section className="px-3 sm:px-6 py-12 sm:py-20">
         <div className="max-w-[1160px] mx-auto">
           <div className="text-center mb-12">
             <div className="section-label">Why MusicConnect</div>
@@ -139,7 +139,7 @@ export default function Home() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="px-6 pb-20">
+      <section className="px-3 sm:px-6 pb-12 sm:pb-20">
         <div className="max-w-[1160px] mx-auto">
           <div className="text-center mb-12">
             <div className="section-label">Simple Process</div>
@@ -159,7 +159,7 @@ export default function Home() {
 
       {/* ── Recent Gigs ── */}
       {recentGigs.length > 0 && (
-        <section className="px-6 pb-20">
+        <section className="px-3 sm:px-6 pb-12 sm:pb-20">
           <div className="max-w-[1160px] mx-auto">
             <div className="flex items-end justify-between flex-wrap gap-3 mb-8">
               <div>
@@ -196,7 +196,7 @@ export default function Home() {
 
       {/* ── Top Musicians ── */}
       {topMusicians.length > 0 && (
-        <section className="px-6 pb-20">
+        <section className="px-3 sm:px-6 pb-12 sm:pb-20">
           <div className="max-w-[1160px] mx-auto">
             <div className="flex items-end justify-between flex-wrap gap-3 mb-8">
               <div>
@@ -221,12 +221,12 @@ export default function Home() {
       )}
 
       {/* ── CTA ── */}
-      <div className="px-6 pb-20">
+      <div className="px-3 sm:px-6 pb-16 sm:pb-20">
         <div className="max-w-[1160px] mx-auto">
-          <div className="rounded-3xl p-14 text-center border border-[rgba(124,106,255,0.2)]"
+          <div className="rounded-2xl p-6 sm:p-14 text-center border border-[rgba(124,106,255,0.2)]"
                style={{ background: 'linear-gradient(135deg, rgba(124,106,255,0.12), rgba(34,211,238,0.06))' }}>
             <div className="section-label">Ready?</div>
-            <h2 className="font-head text-4xl font-extrabold mb-3">Your next bandmate is waiting</h2>
+            <h2 className="font-head text-2xl sm:text-4xl font-extrabold mb-3 break-words">Your next bandmate is waiting</h2>
             <p className="text-[var(--text2)] max-w-md mx-auto mb-8">
               Join 12,000+ musicians already connecting, collaborating, and performing across 48 cities.
             </p>
