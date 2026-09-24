@@ -23,11 +23,54 @@ function StatCard({ label, value, color, change }) {
   )
 }
 
+function RecommendedMusicians() {
+  const [recommended, setRecommended] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await api.get('/recommendations/musicians')
+        setRecommended(res.data)
+      } catch (e) {
+        console.error('Failed to load recommendations:', e)
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  if (loading) return null
+  if (recommended.length === 0) return null
+
+  return (
+    <div className="card p-4 sm:p-5 mb-6 sm:mb-8">
+      <div className="font-head font-bold text-sm sm:text-base mb-4">Musicians you might like 🎵</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {recommended.map(m => (
+          <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-[var(--border)] hover:border-accent transition-all">
+            <Avatar name={m.name} size="md" />
+            <div className="min-w-0">
+              <div className="font-medium text-sm truncate">{m.name}</div>
+              <div className="text-xs text-[var(--text2)]">{m.role} · {m.city}</div>
+              {m.genres && m.genres.length > 0 && (
+                <div className="text-xs text-[var(--text3)] truncate">{m.genres.join(', ')}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function OverviewTab({ user, myGigs, applications }) {
   return (
     <div>
       <h2 className="font-head text-xl sm:text-2xl font-extrabold mb-1">Welcome back, {user.name.split(' ')[0]}! 👋</h2>
       <p className="text-sm text-[var(--text2)] mb-5 sm:mb-7">Here's what's happening with your music career.</p>
+      <RecommendedMusicians />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <StatCard label="Applications"  value={applications.length} color="var(--accent3)" change="Total applied" />
         <StatCard label="Posted Gigs"   value={myGigs.length}       color="var(--gold)"    change="Active listings" />
