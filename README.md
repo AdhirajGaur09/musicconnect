@@ -1,4 +1,3 @@
-markdown
 # 🎸 MusicConnect
 
 A full-stack musician collaboration platform where musicians can discover each other, post gigs, form bands, and manage their music career — built with React, FastAPI, and MongoDB Atlas.
@@ -63,35 +62,36 @@ A full-stack musician collaboration platform where musicians can discover each o
 
 ## 📁 Project Structure
 
+```
 musicconnect/
 ├── backend/
-│ ├── app/
-│ │ ├── main.py # FastAPI app entry point
-│ │ ├── database.py # MongoDB connection
-│ │ ├── config.py # Environment settings
-│ │ ├── auth/
-│ │ │ ├── jwt.py # Token create/decode
-│ │ │ └── deps.py # Auth dependencies (get_current_user, get_admin_user)
-│ │ ├── models/ # Beanie MongoDB documents
-│ │ ├── schemas/ # Pydantic request/response schemas
-│ │ ├── routes/ # API route handlers (incl. recommendations.py)
-│ │ └── utils/ # Password hashing + recommender.py (ML engine)
-│ ├── seed.py # Database seeder (10 users, 8 gigs)
-│ └── requirements.txt
+│   ├── app/
+│   │   ├── main.py              # FastAPI app entry point
+│   │   ├── database.py          # MongoDB connection
+│   │   ├── config.py            # Environment settings
+│   │   ├── auth/
+│   │   │   ├── jwt.py           # Token create/decode
+│   │   │   └── deps.py          # Auth dependencies (get_current_user, get_admin_user)
+│   │   ├── models/              # Beanie MongoDB documents
+│   │   ├── schemas/             # Pydantic request/response schemas
+│   │   ├── routes/              # API route handlers (incl. recommendations.py)
+│   │   └── utils/               # Password hashing + recommender.py (ML engine)
+│   ├── seed.py                  # Database seeder (10 users, 8 gigs)
+│   └── requirements.txt
 │
 └── frontend/
-├── src/
-│ ├── context/
-│ │ └── AuthContext.jsx # Global auth state
-│ ├── services/
-│ │ └── api.js # Axios instance + all API calls
-│ ├── components/
-│ │ ├── common/ # Avatar, Modal, Badge, Skeleton, Field
-│ │ └── layout/ # Navbar, Layout
-│ └── pages/ # Home, Discover, Gigs, Dashboard, Profile, Login, Register
-├── vite.config.js
-└── package.json
-
+    ├── src/
+    │   ├── context/
+    │   │   └── AuthContext.jsx  # Global auth state
+    │   ├── services/
+    │   │   └── api.js           # Axios instance + all API calls
+    │   ├── components/
+    │   │   ├── common/          # Avatar, Modal, Badge, Skeleton, Field
+    │   │   └── layout/          # Navbar, Layout
+    │   └── pages/               # Home, Discover, Gigs, Dashboard, Profile, Login, Register
+    ├── vite.config.js
+    └── package.json
+```
 
 ---
 
@@ -143,49 +143,49 @@ Open: **http://localhost:5173**
 ## 🔑 API Endpoints
 
 ### Authentication
-
-POST /api/auth/register — Register new user
-POST /api/auth/login — Login and get JWT token
-
+```
+POST /api/auth/register    — Register new user
+POST /api/auth/login       — Login and get JWT token
+```
 
 ### Users
-
-GET /api/users — List musicians (filter: city, role, genre, experience)
-GET /api/users/me — Get current user profile
-PATCH /api/users/me — Update profile
-GET /api/users/{id} — Get public profile
-PATCH /api/users/me/change-password
-PATCH /api/users/me/change-email
-
+```
+GET    /api/users          — List musicians (filter: city, role, genre, experience)
+GET    /api/users/me       — Get current user profile
+PATCH  /api/users/me       — Update profile
+GET    /api/users/{id}     — Get public profile
+PATCH  /api/users/me/change-password
+PATCH  /api/users/me/change-email
+```
 
 ### Gigs
-
-GET /api/gigs — List gigs (filter: city, role, status)
-POST /api/gigs — Create gig
-GET /api/gigs/{id} — Get gig detail
-PATCH /api/gigs/{id} — Update gig (owner only)
-DELETE /api/gigs/{id} — Delete gig (owner only)
-POST /api/gigs/{id}/apply — Apply to gig
-DELETE /api/gigs/{id}/apply — Cancel application
-GET /api/gigs/{id}/applicants — View applicants (owner only)
-GET /api/gigs/my/applications — My applications
-
+```
+GET    /api/gigs                    — List gigs (filter: city, role, status)
+POST   /api/gigs                    — Create gig
+GET    /api/gigs/{id}               — Get gig detail
+PATCH  /api/gigs/{id}               — Update gig (owner only)
+DELETE /api/gigs/{id}               — Delete gig (owner only)
+POST   /api/gigs/{id}/apply         — Apply to gig
+DELETE /api/gigs/{id}/apply         — Cancel application
+GET    /api/gigs/{id}/applicants    — View applicants (owner only)
+GET    /api/gigs/my/applications    — My applications
+```
 
 ### Admin (admin only)
-
-GET /api/admin/stats — Platform statistics
-GET /api/admin/users — All users list
-PATCH /api/admin/users/{id}/ban — Ban user
-PATCH /api/admin/users/{id}/unban — Unban user
-PATCH /api/admin/users/{id}/promote — Promote to admin
-DELETE /api/admin/users/{id} — Delete user
-DELETE /api/admin/gigs/{id} — Delete any gig
-
+```
+GET    /api/admin/stats             — Platform statistics
+GET    /api/admin/users             — All users list
+PATCH  /api/admin/users/{id}/ban    — Ban user
+PATCH  /api/admin/users/{id}/unban  — Unban user
+PATCH  /api/admin/users/{id}/promote — Promote to admin
+DELETE /api/admin/users/{id}        — Delete user
+DELETE /api/admin/gigs/{id}         — Delete any gig
+```
 
 ### Recommendations (AI/ML)
-
-GET /api/recommendations/musicians — Get top 5 recommended musicians for the logged-in user
-
+```
+GET    /api/recommendations/musicians   — Get top 5 recommended musicians for the logged-in user
+```
 
 ---
 
