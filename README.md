@@ -1,3 +1,4 @@
+markdown
 # 🎸 MusicConnect
 
 A full-stack musician collaboration platform where musicians can discover each other, post gigs, form bands, and manage their music career — built with React, FastAPI, and MongoDB Atlas.
@@ -7,6 +8,7 @@ A full-stack musician collaboration platform where musicians can discover each o
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
 
 ---
 
@@ -23,6 +25,7 @@ A full-stack musician collaboration platform where musicians can discover each o
 - 📊 **User Dashboard** — Overview stats, posted gigs, applications, account settings
 - 👤 **Profile Management** — Edit bio, genres, availability, social links, change email/password
 - 🛡️ **Admin Panel** — Role-based access control, ban/unban users, platform-wide stats
+- 🤖 **AI-Powered Recommendations** — Content-based musician matching using TF-IDF vectorization and cosine similarity
 - ✨ **Modern UI** — Framer Motion animations, loading skeletons, toast notifications, responsive design
 
 ---
@@ -47,47 +50,48 @@ A full-stack musician collaboration platform where musicians can discover each o
 | python-jose | JWT token generation and verification |
 | passlib / bcrypt | Password hashing |
 | Pydantic v2 | Request/response validation |
+| scikit-learn | ML-based musician recommendation engine (TF-IDF + cosine similarity) |
 
 ### Database & Infrastructure
 | Technology | Purpose |
 |---|---|
 | MongoDB Atlas | Cloud database (3 collections) |
 | Vite | Frontend build tool + dev proxy |
+| Render | Backend (Web Service) + Frontend (Static Site) hosting |
 
 ---
 
 ## 📁 Project Structure
 
-```
 musicconnect/
 ├── backend/
-│   ├── app/
-│   │   ├── main.py              # FastAPI app entry point
-│   │   ├── database.py          # MongoDB connection
-│   │   ├── config.py            # Environment settings
-│   │   ├── auth/
-│   │   │   ├── jwt.py           # Token create/decode
-│   │   │   └── deps.py          # Auth dependencies (get_current_user, get_admin_user)
-│   │   ├── models/              # Beanie MongoDB documents
-│   │   ├── schemas/             # Pydantic request/response schemas
-│   │   ├── routes/              # API route handlers
-│   │   └── utils/               # Password hashing utilities
-│   ├── seed.py                  # Database seeder (10 users, 8 gigs)
-│   └── requirements.txt
+│ ├── app/
+│ │ ├── main.py # FastAPI app entry point
+│ │ ├── database.py # MongoDB connection
+│ │ ├── config.py # Environment settings
+│ │ ├── auth/
+│ │ │ ├── jwt.py # Token create/decode
+│ │ │ └── deps.py # Auth dependencies (get_current_user, get_admin_user)
+│ │ ├── models/ # Beanie MongoDB documents
+│ │ ├── schemas/ # Pydantic request/response schemas
+│ │ ├── routes/ # API route handlers (incl. recommendations.py)
+│ │ └── utils/ # Password hashing + recommender.py (ML engine)
+│ ├── seed.py # Database seeder (10 users, 8 gigs)
+│ └── requirements.txt
 │
 └── frontend/
-    ├── src/
-    │   ├── context/
-    │   │   └── AuthContext.jsx  # Global auth state
-    │   ├── services/
-    │   │   └── api.js           # Axios instance + all API calls
-    │   ├── components/
-    │   │   ├── common/          # Avatar, Modal, Badge, Skeleton, Field
-    │   │   └── layout/          # Navbar, Layout
-    │   └── pages/               # Home, Discover, Gigs, Dashboard, Profile, Login, Register
-    ├── vite.config.js
-    └── package.json
-```
+├── src/
+│ ├── context/
+│ │ └── AuthContext.jsx # Global auth state
+│ ├── services/
+│ │ └── api.js # Axios instance + all API calls
+│ ├── components/
+│ │ ├── common/ # Avatar, Modal, Badge, Skeleton, Field
+│ │ └── layout/ # Navbar, Layout
+│ └── pages/ # Home, Discover, Gigs, Dashboard, Profile, Login, Register
+├── vite.config.js
+└── package.json
+
 
 ---
 
@@ -139,44 +143,49 @@ Open: **http://localhost:5173**
 ## 🔑 API Endpoints
 
 ### Authentication
-```
-POST /api/auth/register    — Register new user
-POST /api/auth/login       — Login and get JWT token
-```
+
+POST /api/auth/register — Register new user
+POST /api/auth/login — Login and get JWT token
+
 
 ### Users
-```
-GET    /api/users          — List musicians (filter: city, role, genre, experience)
-GET    /api/users/me       — Get current user profile
-PATCH  /api/users/me       — Update profile
-GET    /api/users/{id}     — Get public profile
-PATCH  /api/users/me/change-password
-PATCH  /api/users/me/change-email
-```
+
+GET /api/users — List musicians (filter: city, role, genre, experience)
+GET /api/users/me — Get current user profile
+PATCH /api/users/me — Update profile
+GET /api/users/{id} — Get public profile
+PATCH /api/users/me/change-password
+PATCH /api/users/me/change-email
+
 
 ### Gigs
-```
-GET    /api/gigs                    — List gigs (filter: city, role, status)
-POST   /api/gigs                    — Create gig
-GET    /api/gigs/{id}               — Get gig detail
-PATCH  /api/gigs/{id}               — Update gig (owner only)
-DELETE /api/gigs/{id}               — Delete gig (owner only)
-POST   /api/gigs/{id}/apply         — Apply to gig
-DELETE /api/gigs/{id}/apply         — Cancel application
-GET    /api/gigs/{id}/applicants    — View applicants (owner only)
-GET    /api/gigs/my/applications    — My applications
-```
+
+GET /api/gigs — List gigs (filter: city, role, status)
+POST /api/gigs — Create gig
+GET /api/gigs/{id} — Get gig detail
+PATCH /api/gigs/{id} — Update gig (owner only)
+DELETE /api/gigs/{id} — Delete gig (owner only)
+POST /api/gigs/{id}/apply — Apply to gig
+DELETE /api/gigs/{id}/apply — Cancel application
+GET /api/gigs/{id}/applicants — View applicants (owner only)
+GET /api/gigs/my/applications — My applications
+
 
 ### Admin (admin only)
-```
-GET    /api/admin/stats             — Platform statistics
-GET    /api/admin/users             — All users list
-PATCH  /api/admin/users/{id}/ban    — Ban user
-PATCH  /api/admin/users/{id}/unban  — Unban user
-PATCH  /api/admin/users/{id}/promote — Promote to admin
-DELETE /api/admin/users/{id}        — Delete user
-DELETE /api/admin/gigs/{id}         — Delete any gig
-```
+
+GET /api/admin/stats — Platform statistics
+GET /api/admin/users — All users list
+PATCH /api/admin/users/{id}/ban — Ban user
+PATCH /api/admin/users/{id}/unban — Unban user
+PATCH /api/admin/users/{id}/promote — Promote to admin
+DELETE /api/admin/users/{id} — Delete user
+DELETE /api/admin/gigs/{id} — Delete any gig
+
+
+### Recommendations (AI/ML)
+
+GET /api/recommendations/musicians — Get top 5 recommended musicians for the logged-in user
+
 
 ---
 
@@ -251,6 +260,26 @@ After running `python seed.py`:
 
 ---
 
+## 🤖 AI-Powered Musician Recommendations
+
+MusicConnect includes a **content-based recommendation system** that suggests musicians a user is likely to want to collaborate with, based on profile similarity.
+
+### How it works
+1. Each musician's profile (city, role, genres, experience level, bio) is converted into a single text representation.
+2. **TF-IDF (Term Frequency–Inverse Document Frequency)** vectorization transforms these profiles into numerical feature vectors.
+3. **Cosine similarity** is computed between the current user's vector and every other active user's vector.
+4. The top 5 most similar profiles are returned, ranked by similarity score.
+
+### Why this approach
+- **No training data required** — works from day one with real profile data, no labeled dataset needed.
+- **Interpretable** — similarity scores are explainable (shared city/genre/role directly increase the score).
+- **Standard baseline** — this is the conventional first approach for recommendation systems before collaborative filtering becomes viable (which needs sufficient user-interaction history).
+
+### Tech used
+`scikit-learn` (`TfidfVectorizer`, `cosine_similarity`) — see [`backend/app/utils/recommender.py`](backend/app/utils/recommender.py)
+
+---
+
 ## 🔒 Security
 
 - Passwords hashed with **bcrypt** (passlib)
@@ -267,14 +296,16 @@ After running `python seed.py`:
 ### Backend → Render.com
 1. Push `backend/` to GitHub
 2. New Web Service on Render
-3. Build: `pip install -r requirements.txt`
-4. Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Add environment variables from `.env`
+3. Runtime: Python 3, Root Directory: `backend`
+4. Build: `pip install -r requirements.txt`
+5. Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+6. Add environment variables from `.env` (`MONGODB_URL`, `SECRET_KEY`, `FRONTEND_URL`, etc.)
 
-### Frontend → Vercel
-1. Import `frontend/` from GitHub
-2. Framework: Vite
-3. Add env variable: `VITE_API_URL=https://your-render-app.onrender.com`
+### Frontend → Render.com
+1. New Static Site on Render, connect `frontend/`
+2. Build: `npm install && npm run build`
+3. Publish directory: `dist`
+4. Add env variable: `VITE_API_URL=https://your-backend-app.onrender.com/api`
 
 ---
 
